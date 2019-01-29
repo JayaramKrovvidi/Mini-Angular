@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http'
+import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
 import { UploadFileService } from 'src/app/services/UploadFileService/upload-file.service';
+import { interval } from 'rxjs'
 
  
 @Component({
@@ -13,13 +14,24 @@ export class UploadComponent implements OnInit {
 
   selectedFiles : FileList;
   currentUpload : File;
-  loading : boolean = false;
+  executePercentage: any = 0;
+  uploaded: boolean;
 
   constructor(private uploadService : UploadFileService){}
 
   ngOnInit() {
+    this.uploaded = false;
   }
   
+  progressTracker()
+  {
+    interval(50)
+    .subscribe((val) => {
+      if(this.executePercentage < 100)
+        this.executePercentage += 1; 
+    });
+  }
+
   selectFile(event)
   {
     this.selectedFiles = event.target.files;
@@ -30,10 +42,16 @@ export class UploadComponent implements OnInit {
     this.currentUpload = this.selectedFiles.item(0);
     this.uploadService.pushFileToWebsite(this.currentUpload).subscribe(response =>{
       if(response instanceof HttpResponse)
+      {
         console.log("File uploaded Successfully");
-        this.loading = true;
-      });
+        this.uploaded = true;
+      }
+      else if(response instanceof HttpErrorResponse)
+      {
+        console.log("Something went wrong");
+        this.uploaded = false;
+      }
+    });
       this.selectedFiles = undefined;
   }
-
 }

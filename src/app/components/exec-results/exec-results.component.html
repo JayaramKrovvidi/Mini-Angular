@@ -1,0 +1,52 @@
+<div class="mat-elevation-z8 data-table">
+  <mat-table class="full-width-table table table-bordered" matSort [dataSource]="dataSource" matSort aria-label="Elements">
+    <!-- Id Column -->
+    <thead>
+    <ng-container matColumnDef="file_id">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> File Id </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.file_id}} </mat-cell>
+    </ng-container>
+  
+   
+    <ng-container matColumnDef="line_num">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> Line Number </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.line_num}} </mat-cell>
+    </ng-container>
+  
+    
+    <ng-container matColumnDef="start_time">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> Start Time </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.start_time}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expected_response_code">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> Expected Response Code </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.expected_response_code}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="obtained_response_code">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> Obtained Response Code </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.obtained_response_code}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expected_response_type">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> Expected Response Type </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.expected_response_type}} </mat-cell>
+    </ng-container>
+   <ng-container matColumnDef="obtained_response_type">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> Obtained Response Type </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.obtained_response_type}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="result">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> Result </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.result}} </mat-cell>
+    </ng-container>
+  </thead>
+    <mat-header-row   *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+      [length]="dataSource.data.length"
+      [pageIndex]="0"
+      [pageSize]="50"
+      [pageSizeOptions]="[25, 50, 100, 250]">
+  </mat-paginator>
+</div>

@@ -1,10 +1,5 @@
 <form>
 
-    <div class="form-group">
-        <label for="username" >Username</label>
-        <input type="text" class="form-control" id="username" placeholder=""  >
-    </div>
-
     <div style="text-align:center" class="form-group">
         <label class="custom-file-upload">
             <input type="file" accept=".xlsx" [attr.multiple]="multiple ? true : null" (change)="selectFile($event)" />
@@ -16,4 +11,23 @@
         </button>&nbsp;
         <button type="button" class="btn btn-success" (click)="clearFile()">Clear file</button>
     </div>
+
 </form>
+
+<div style="align-content: center">
+    <circle-progress
+        [hidden]="(!uploaded)"
+        [percent]="executePercentage"
+        [maxPercent]="100"
+        [radius]="100"
+        [outerStrokeWidth]="16"
+        [innerStrokeWidth]="8"
+        [outerStrokeColor]="'#78C000'"
+        [innerStrokeColor]="'#C7E596'"
+        [animation]="true"
+        [animationDuration]="300"
+        [startFromZero]="false">
+    </circle-progress>
+</div>
+
+<app-exec-results *ngIf="(executePercentage === 100)"></app-exec-results>
