@@ -12,6 +12,7 @@ import { DataTableComponent } from './components/data-table/data-table.component
 import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExecResultsComponent } from './components/exec-results/exec-results.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ExecResultsComponent } from './components/exec-results/exec-results.com
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    NgxSpinnerModule,
     NgCircleProgressModule.forRoot({
       // set defaults here
       radius: 100,
