@@ -64,6 +64,7 @@ export class UploadComponent implements OnInit {
         response =>{
             console.log(response);
             this.spinner.hide();
+            this.executePercentage = 100;
           },
           error => {
             console.log(error);
