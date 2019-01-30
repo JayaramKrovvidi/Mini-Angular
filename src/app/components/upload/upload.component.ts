@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http'
 import { UploadFileService } from 'src/app/services/UploadFileService/upload-file.service';
 import { interval } from 'rxjs'
+import { NgxSpinnerService } from 'ngx-spinner';
 
  
 @Component({
@@ -17,7 +18,7 @@ export class UploadComponent implements OnInit {
   executePercentage: any = 0;
   uploaded: boolean;
 
-  constructor(private uploadService : UploadFileService){}
+  constructor(private uploadService : UploadFileService, private spinner: NgxSpinnerService){}
 
   ngOnInit() {
     this.uploaded = false;
@@ -39,8 +40,11 @@ export class UploadComponent implements OnInit {
 
   upload()
   {
+
     this.currentUpload = this.selectedFiles.item(0);
+    this.spinner.show();
     this.uploadService.pushFileToWebsite(this.currentUpload).subscribe(response =>{
+      this.spinner.hide();
       if(response instanceof HttpResponse)
       {
         console.log("File uploaded Successfully");
