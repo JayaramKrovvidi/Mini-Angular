@@ -18,19 +18,10 @@ export class UploadComponent implements OnInit {
   executePercentage: any = 0;
   uploaded: boolean;
 
-  constructor(private uploadService : UploadFileService, private spinner: NgxSpinnerService){}
+  constructor(private uploadService : UploadFileService, public spinner: NgxSpinnerService){}
 
   ngOnInit() {
     this.uploaded = false;
-  }
-  
-  progressTracker()
-  {
-    interval(50)
-    .subscribe((val) => {
-      if(this.executePercentage < 100)
-        this.executePercentage += 1; 
-    });
   }
 
   selectFile(event)
@@ -40,22 +31,17 @@ export class UploadComponent implements OnInit {
 
   upload()
   {
-
-    this.currentUpload = this.selectedFiles.item(0);
     this.spinner.show();
-    this.uploadService.pushFileToWebsite(this.currentUpload).subscribe(response =>{
-      this.spinner.hide();
-      if(response instanceof HttpResponse)
-      {
-        console.log("File uploaded Successfully");
-        this.uploaded = true;
+    this.currentUpload = this.selectedFiles.item(0);
+    this.uploadService.pushFileToWebsite(this.currentUpload).subscribe(
+      response => {
+        console.log(response);
+        this.spinner.hide();
+      },
+      error => {
+        console.log(error);
+        this.spinner.hide();
       }
-      else if(response instanceof HttpErrorResponse)
-      {
-        console.log("Something went wrong");
-        this.uploaded = false;
-      }
-    });
-      this.selectedFiles = undefined;
+    );
   }
 }
