@@ -13,6 +13,8 @@ import { MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/mate
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExecResultsComponent } from './components/exec-results/exec-results.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ExecutionResultsService } from './services/ExecutionResultsService/execution-results.service';
+
 
 @NgModule({
   declarations: [
@@ -43,7 +45,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MatSortModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [ExecutionResultsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

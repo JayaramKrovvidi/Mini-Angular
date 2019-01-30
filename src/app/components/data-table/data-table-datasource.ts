@@ -2,49 +2,55 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
+import { HistoryService } from 'src/app/services/HistoryService/history.service';
 
 export interface DataTableItem {
-  name: string;
+  fileId:number,
+  fileName: string;
   startTime: string;
-  endTime: string;
-  exTime: string;
-  total: number;
-  passCount: number;
-  failCount: number;
-  passpercen: number;
+  stopTime: string;
+  executionTime: number;
+  recordsCount: number;
+  recordsPassed: number;
+  recordsFailed: number;
+  passPercentage: number;
 }
 
-const EXAMPLE_DATA: DataTableItem[] = [
-  { name: 'File1', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File2', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File3', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File4', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File5', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File6', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File7', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File8', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File9', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-  { name: 'File10', startTime: '12:15', endTime: '12:17', exTime: '00.02', total: 120, passCount: 100, failCount: 20, passpercen: 80},
-];
+
 
 export class DataTableDataSource extends DataSource<DataTableItem> {
-  data: DataTableItem[] = EXAMPLE_DATA;
+  data: DataTableItem[] = [];
 
-  constructor(private paginator: MatPaginator, private sort: MatSort) {
+  constructor(private paginator: MatPaginator, private sort: MatSort,private historyService:HistoryService) {
     super();
   }
 
   connect(): Observable<DataTableItem[]> {
+    //console.log("here");
+    return new Observable<DataTableItem[]>(observer => {
+      this.historyService.pushHistoryToWebsite().subscribe((servers) => {
+        if (servers) {
+          return this.applyMutations(servers).subscribe(data => {
+            observer.next(data);
+          });
+        }
+      });
+    });
+  }
+    // Combine everything that affects the rendered data into one update
+    // stream for the data-table to consume.
+    applyMutations(tmpData: DataTableItem[]): Observable<DataTableItem[]>{
     const dataMutations = [
-      observableOf(this.data),
+      observableOf(tmpData),
       this.paginator.page,
       this.sort.sortChange
     ];
 
+    // Set the paginator's length
     this.paginator.length = this.data.length;
 
     return merge(...dataMutations).pipe(map(() => {
-      return this.getPagedData(this.getSortedData([...this.data]));
+      return this.getPagedData(this.getSortedData([...tmpData]));
     }));
   }
 
@@ -63,14 +69,15 @@ export class DataTableDataSource extends DataSource<DataTableItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
+        case 'fileName': return compare(a.fileName, b.fileName, isAsc);
+        case 'fileId': return compare(+a.fileId, +b.fileId, isAsc);
         case 'startTime': return compare(a.startTime, b.startTime, isAsc);
-        case 'endTime': return compare(a.endTime, b.endTime, isAsc);
-        case 'exTime': return compare(a.exTime, b.exTime, isAsc);
-        case 'total': return compare(+a.total, +b.total, isAsc);
-        case 'passCount': return compare(+a.passCount, +b.passCount, isAsc);
-        case 'failCount': return compare(+a.failCount, +b.failCount, isAsc);
-        case 'passpercen': return compare(+a.passpercen, +b.passpercen, isAsc);
+        case 'stopTime': return compare(a.stopTime, b.stopTime, isAsc);
+        case 'executionTime': return compare(+a.executionTime, +b.executionTime, isAsc);
+        case 'recordsCount': return compare(+a.recordsCount, +b.recordsCount, isAsc);
+        case 'recordsPassed': return compare(+a.recordsPassed, +b.recordsPassed, isAsc);
+        case 'recordsFailed': return compare(+a.recordsFailed, +b.recordsFailed, isAsc);
+        case 'passPercentage': return compare(+a.passPercentage, +b.passPercentage, isAsc);
         default: return 0;
       }
     });

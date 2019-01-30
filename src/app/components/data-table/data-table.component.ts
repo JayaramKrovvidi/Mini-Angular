@@ -3,12 +3,13 @@ import { MatPaginator, MatSort } from '@angular/material';
 import { DataTableDataSource } from './data-table-datasource';
 import { UploadFileService } from 'src/app/services/UploadFileService/upload-file.service';
 import 'hammerjs';
+import { HistoryService } from 'src/app/services/HistoryService/history.service';
 
 @Component({
   selector: 'app-data-table',
   templateUrl: './data-table.component.html',
   styleUrls: ['./data-table.component.css'],
-  providers: [UploadFileService]
+  providers: [HistoryService]
 })
 export class DataTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -16,18 +17,13 @@ export class DataTableComponent implements OnInit {
   dataSource: DataTableDataSource;
   files: any = [];
 
-  constructor(private uploadService : UploadFileService) { }
+  constructor(private historyService : HistoryService) { }
 
-  displayedColumns = ['name', 'startTime', 'endTime', 'exTime', 'total', 'passCount', 'failCount', 'passpercen'];
+  displayedColumns = ['fileId','fileName', 'startTime', 'stopTime','executionTime', 'recordsCount', 'recordsPassed', 'recordsFailed',  'passPercentage'];
 
   ngOnInit() {
-    /*this.uploadService.getAllFiles().subscribe((response) => {
-      console.log(response);
-      if(response && response.length > 0){
-        this.files = response;
-      }
-    });
-*/
-    this.dataSource = new DataTableDataSource(this.paginator, this.sort);
+  
+    this.dataSource = new DataTableDataSource(this.paginator, this.sort,this.historyService);
+    
   }
 }

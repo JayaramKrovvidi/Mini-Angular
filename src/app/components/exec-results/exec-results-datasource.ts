@@ -2,29 +2,27 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
+import { ExecutionResultsService } from 'src/app/services/ExecutionResultsService/execution-results.service';
+
 
 // TODO: Replace this with your own data model type
 export interface ExecResultsItem {
-  file_id :number ,
-    line_num :number,
-    start_time :string,
-    expected_response_code:number,
-    obtained_response_code :number,
-    expected_response_type :string,
-    obtained_response_type:string,
+    fileId :number ,  
+    lineNo :number,  
+    startTime :Date,
+    endTime:Date,
+    expectedResponseCode:number,
+    obtainedResponseCode :number,
+    expectedResponseType :string,
+    obtainedResponseType:string,
     result :boolean,
 }
+//console.log(new Date(1556519730000));
 
 // TODO: replace this with real data from your application
-const EXAMPLE_DATA: ExecResultsItem[] = [
-  {file_id:1, line_num:1, start_time:"09:30",expected_response_code:200,obtained_response_code:200,expected_response_type:"abc",obtained_response_type:"abcd",result:true},
-  {file_id:1, line_num:1, start_time:"09:30",expected_response_code:400,obtained_response_code:100,expected_response_type:"abc",obtained_response_type:"abcd",result:true},
-  {file_id:1, line_num:1, start_time:"09:30",expected_response_code:643,obtained_response_code:200,expected_response_type:"abc",obtained_response_type:"abcd",result:true},
-  {file_id:1, line_num:1, start_time:"09:30",expected_response_code:122,obtained_response_code:200,expected_response_type:"abc",obtained_response_type:"abcd",result:true},
-  {file_id:1, line_num:1, start_time:"09:30",expected_response_code:123,obtained_response_code:600,expected_response_type:"abc",obtained_response_type:"abcd",result:true},
-  {file_id:1, line_num:1, start_time:"09:30",expected_response_code:444,obtained_response_code:200,expected_response_type:"abc",obtained_response_type:"abcd",result:true},
-  {file_id:1, line_num:1, start_time:"09:30",expected_response_code:333,obtained_response_code:99,expected_response_type:"abc",obtained_response_type:"abcd",result:true}
-];
+
+ 
+
 
 /**
  * Data source for the ExecResults view. This class should
@@ -32,10 +30,12 @@ const EXAMPLE_DATA: ExecResultsItem[] = [
  * (including sorting, pagination, and filtering).
  */
 export class ExecResultsDataSource extends DataSource<ExecResultsItem> {
-  data: ExecResultsItem[] = EXAMPLE_DATA;
-
-  constructor(private paginator: MatPaginator, private sort: MatSort) {
+  
+  data: ExecResultsItem[] = [];
+  constructor(private paginator: MatPaginator, private sort:MatSort,private resultService:ExecutionResultsService) {
     super();
+    //console.log(this.resultService.pushResultsToWebsite());
+    //data = this.resultService.pushResultsToWebsite();
   }
 
   /**
@@ -44,10 +44,22 @@ export class ExecResultsDataSource extends DataSource<ExecResultsItem> {
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<ExecResultsItem[]> {
+    console.log("here");
+    return new Observable<ExecResultsItem[]>(observer => {
+      this.resultService.pushResultsToWebsite().subscribe((servers) => {
+        if (servers) {
+          return this.applyMutations(servers).subscribe(data => {
+            observer.next(data);
+          });
+        }
+      });
+    });
+  }
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
+    applyMutations(tmpData: ExecResultsItem[]): Observable<ExecResultsItem[]>{
     const dataMutations = [
-      observableOf(this.data),
+      observableOf(tmpData),
       this.paginator.page,
       this.sort.sortChange
     ];
@@ -56,10 +68,9 @@ export class ExecResultsDataSource extends DataSource<ExecResultsItem> {
     this.paginator.length = this.data.length;
 
     return merge(...dataMutations).pipe(map(() => {
-      return this.getPagedData(this.getSortedData([...this.data]));
+      return this.getPagedData(this.getSortedData([...tmpData]));
     }));
   }
-
   /**
    *  Called when the table is being destroyed. Use this function, to clean up
    * any open connections or free any held resources that were set up during connect.
@@ -87,13 +98,14 @@ export class ExecResultsDataSource extends DataSource<ExecResultsItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'file_id': return compare(a.file_id, b.file_id, isAsc);
-        case 'line_num': return compare(+a.line_num, +b.line_num, isAsc);
-        case 'start_time': return compare(+a.start_time, +b.start_time, isAsc);
-        case 'expected_response_code': return compare(+a.expected_response_code, +b.expected_response_code, isAsc);
-        case 'obtained_response_code': return compare(+a.obtained_response_code, +b.obtained_response_code, isAsc);
-        case 'expected_response_type': return compare(+a.expected_response_type, +b.expected_response_type, isAsc);
-        case 'obtained_response_type': return compare(+a.obtained_response_type, +b.obtained_response_type, isAsc);
+        case 'fileId': return compare(a.fileId, b.fileId, isAsc);
+        case 'lineNo': return compare(+a.lineNo, +b.lineNo, isAsc);
+        case 'startTime': return compare(+a.startTime, +b.startTime, isAsc);
+        case 'endTime': return compare(+a.endTime, +b.endTime, isAsc);
+        case 'expectedResponseCode': return compare(+a.expectedResponseCode, +b.expectedResponseCode, isAsc);
+        case 'obtainedResponseCode': return compare(+a.obtainedResponseCode, +b.obtainedResponseCode, isAsc);
+        case 'expectedResponseType': return compare(+a.expectedResponseType, +b.expectedResponseType, isAsc);
+        case 'obtainedResponseType': return compare(+a.obtainedResponseType, +b.obtainedResponseType, isAsc);
         case 'result': return compare(+a.result, +b.result, isAsc);
         default: return 0;
       }

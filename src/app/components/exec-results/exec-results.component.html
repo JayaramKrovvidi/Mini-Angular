@@ -2,37 +2,41 @@
   <mat-table class="full-width-table table table-bordered" matSort [dataSource]="dataSource" matSort aria-label="Elements">
     <!-- Id Column -->
     <thead>
-    <ng-container matColumnDef="file_id">
+    <ng-container matColumnDef="fileId">
       <mat-header-cell mat-sort-header *matHeaderCellDef> File Id </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.file_id}} </mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.fileId}} </mat-cell>
     </ng-container>
   
    
-    <ng-container matColumnDef="line_num">
+    <ng-container matColumnDef="lineNo">
       <mat-header-cell mat-sort-header *matHeaderCellDef> Line Number </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.line_num}} </mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.lineNo}} </mat-cell>
     </ng-container>
   
     
-    <ng-container matColumnDef="start_time">
+    <ng-container matColumnDef="startTime">
       <mat-header-cell mat-sort-header *matHeaderCellDef> Start Time </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.start_time}} </mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.startTime}} </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="expected_response_code">
+    <ng-container matColumnDef="endTime">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> End Time </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.endTime}} </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="expectedResponseCode">
       <mat-header-cell mat-sort-header *matHeaderCellDef> Expected Response Code </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.expected_response_code}} </mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.expectedResponseCode}} </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="obtained_response_code">
+    <ng-container matColumnDef="obtainedResponseCode">
       <mat-header-cell mat-sort-header *matHeaderCellDef> Obtained Response Code </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.obtained_response_code}} </mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.obtainedResponseCode}} </mat-cell>
     </ng-container>
-    <ng-container matColumnDef="expected_response_type">
+    <ng-container matColumnDef="expectedResponseType">
       <mat-header-cell mat-sort-header *matHeaderCellDef> Expected Response Type </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.expected_response_type}} </mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.expectedResponseType}} </mat-cell>
     </ng-container>
-   <ng-container matColumnDef="obtained_response_type">
+   <ng-container matColumnDef="obtainedResponseType">
       <mat-header-cell mat-sort-header *matHeaderCellDef> Obtained Response Type </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.obtained_response_type}} </mat-cell>
+      <mat-cell *matCellDef="let row"> {{row.obtainedResponseType}} </mat-cell>
     </ng-container>
     <ng-container matColumnDef="result">
       <mat-header-cell mat-sort-header *matHeaderCellDef> Result </mat-header-cell>

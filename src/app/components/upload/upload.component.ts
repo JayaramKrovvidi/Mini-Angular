@@ -42,7 +42,7 @@ export class UploadComponent implements OnInit {
   {
 
     this.currentUpload = this.selectedFiles.item(0);
-    this.spinner.show();
+   // this.spinner.show();
     this.uploadService.pushFileToWebsite(this.currentUpload).subscribe(response =>{
       this.spinner.hide();
       if(response instanceof HttpResponse)
