@@ -13,10 +13,11 @@
             <input type="file" accept=".xlsx" [attr.multiple]="multiple ? true : null" (change)="selectFile($event)" />
         </label>
         <br/>
-        <button type="button" class="btn btn-success" [disabled]="!selectedFiles" (click)="upload()">
-            Upload
+        <button type="button" class="btn btn-success" [disabled]="!selectedFiles" (click)="upload($event)">
+            Upload & Execute
+            
         </button>&nbsp;
-        <button type="button" class="btn btn-success" (click)="clearFile()">Clear file</button>
+        <button type="reset" class="btn btn-success">Clear file</button>
     </div>
 
 </form>
