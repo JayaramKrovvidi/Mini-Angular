@@ -1,3 +1,4 @@
+import { Output, EventEmitter } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
@@ -20,7 +21,6 @@ export interface DataTableItem {
 
 export class DataTableDataSource extends DataSource<DataTableItem> {
   data: DataTableItem[] = [];
-
   constructor(private paginator: MatPaginator, private sort: MatSort,private historyService:HistoryService) {
     super();
   }
@@ -28,17 +28,19 @@ export class DataTableDataSource extends DataSource<DataTableItem> {
   connect(): Observable<DataTableItem[]> {
     //console.log("here");
     return new Observable<DataTableItem[]>(observer => {
-      this.historyService.pushHistoryToWebsite().subscribe((servers) => {
-        if (servers) {
-          return this.applyMutations(servers).subscribe(data => {
-            observer.next(data);
-          });
-        }
-      });
+      this.historyService.pushHistoryToWebsite().subscribe(
+        (servers) => {
+          if (servers) {
+            return this.applyMutations(servers).subscribe(data => {
+              observer.next(data);
+            });
+          }
+        },
+        (error) => {
+          window.alert(error);
+        });
     });
   }
-    // Combine everything that affects the rendered data into one update
-    // stream for the data-table to consume.
     applyMutations(tmpData: DataTableItem[]): Observable<DataTableItem[]>{
     const dataMutations = [
       observableOf(tmpData),
@@ -46,7 +48,6 @@ export class DataTableDataSource extends DataSource<DataTableItem> {
       this.sort.sortChange
     ];
 
-    // Set the paginator's length
     this.paginator.length = this.data.length;
 
     return merge(...dataMutations).pipe(map(() => {

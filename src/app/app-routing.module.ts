@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HistoryComponent } from './components/history/history.component';
 import { UploadComponent } from './components/upload/upload.component';
+import { ExecResultsComponent } from './components/exec-results/exec-results.component';
 
 const routes: Routes = [
   {path: 'uploadFile',component: UploadComponent},
   { path:'', pathMatch : 'full' , redirectTo: '/uploadFile' },
   {path: 'history',component: HistoryComponent},
+  {path: 'results/:id',component: ExecResultsComponent}
 ];
 
 @NgModule({

@@ -32,7 +32,7 @@ export interface ExecResultsItem {
 export class ExecResultsDataSource extends DataSource<ExecResultsItem> {
   
   data: ExecResultsItem[] = [];
-  constructor(private paginator: MatPaginator, private sort:MatSort,private resultService:ExecutionResultsService) {
+  constructor(private paginator: MatPaginator, private sort:MatSort,private resultService:ExecutionResultsService,private fileId : number) {
     super();
     //console.log(this.resultService.pushResultsToWebsite());
     //data = this.resultService.pushResultsToWebsite();
@@ -46,7 +46,7 @@ export class ExecResultsDataSource extends DataSource<ExecResultsItem> {
   connect(): Observable<ExecResultsItem[]> {
     console.log("here");
     return new Observable<ExecResultsItem[]>(observer => {
-      this.resultService.pushResultsToWebsite().subscribe((servers) => {
+      this.resultService.fetchResultsFromWebsite(this.fileId).subscribe((servers) => {
         if (servers) {
           return this.applyMutations(servers).subscribe(data => {
             observer.next(data);

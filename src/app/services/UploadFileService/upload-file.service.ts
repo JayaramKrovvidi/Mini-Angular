@@ -14,7 +14,7 @@ export class UploadFileService {
   {
     const formData : FormData = new FormData();
     formData.append('testingData', file);
-    return this.http.post("/test2/upload",formData)
+    return this.http.post("/test3/upload",formData)
     .pipe(
       retry(1),
       catchError(this.handleError)

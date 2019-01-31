@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UploadFileService } from 'src/app/services/UploadFileService/upload-file.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {Router} from "@angular/router"
 import * as XLSX from 'ts-xlsx';
 
  
@@ -19,7 +20,7 @@ export class UploadComponent implements OnInit {
   uploaded: boolean;
   isFileValid: boolean;
 
-  constructor(private uploadService : UploadFileService, public spinner: NgxSpinnerService){}
+  constructor(private uploadService : UploadFileService, public spinner: NgxSpinnerService, private router: Router){}
 
   ngOnInit() {
     this.uploaded = false;
@@ -62,9 +63,11 @@ export class UploadComponent implements OnInit {
       this.currentUpload = this.selectedFiles.item(0);
       this.uploadService.pushFileToWebsite(this.currentUpload).subscribe(
         response =>{
-            console.log(response);
+            console.log(response.fileId);
             this.spinner.hide();
             this.executePercentage = 100;
+            if(this.executePercentage===100)
+              this.router.navigate(['/results',response.fileId]);
           },
           error => {
             console.log(error);
@@ -78,5 +81,4 @@ export class UploadComponent implements OnInit {
       alert("XLSX file headers are incorrect");
     }
   }
-
 }

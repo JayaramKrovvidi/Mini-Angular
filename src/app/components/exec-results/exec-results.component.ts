@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort } from '@angular/material';
 import { ExecResultsDataSource } from './exec-results-datasource';
 import { ExecutionResultsService } from 'src/app/services/ExecutionResultsService/execution-results.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -14,15 +15,19 @@ export class ExecResultsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: ExecResultsDataSource;
+  fileId :number;
+  constructor(private resultService:ExecutionResultsService, private activatedRoute: ActivatedRoute){
+    this.activatedRoute.params.subscribe(params => {
+      this.fileId =+ params['id'];
+      console.log(this.fileId); // Print the parameter to the console. 
+  });
+  }
 
-  constructor(private resultService:ExecutionResultsService){}
-
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['fileId', 'lineNo', 'startTime','endTime','expectedResponseCode','obtainedResponseCode','expectedResponseType','obtainedResponseType','result'];
 
   ngOnInit() {
    
-    this.dataSource = new ExecResultsDataSource(this.paginator, this.sort, this.resultService);
+    this.dataSource = new ExecResultsDataSource(this.paginator, this.sort, this.resultService,this.fileId);
     
    
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ExecResultsItem } from 'src/app/components/exec-results/exec-results-datasource';
@@ -11,20 +10,9 @@ import { ExecResultsItem } from 'src/app/components/exec-results/exec-results-da
 export class ExecutionResultsService {
   constructor(private http : HttpClient) { }
 
-  pushResultsToWebsite() : Observable< ExecResultsItem[] >
+  fetchResultsFromWebsite(fileId) : Observable< ExecResultsItem[] >
   {
-    
-    return this.http.get< ExecResultsItem[] >("/test2/results/getRecords");
-
-    
-  }
-
-  pushOneResultToWebsite() : Observable< ExecResultsItem[] >
-  {
-    
-    return this.http.get< ExecResultsItem[] >("/test2/results/{id}/get");
-
-    
+    return this.http.get< ExecResultsItem[] >('/test3/results/'+fileId+'/get');
   }
 
 
