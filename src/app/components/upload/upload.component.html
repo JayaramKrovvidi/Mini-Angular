@@ -3,7 +3,7 @@
   size="medium"
   color="#fff"
   type="ball-spin-clockwise">
- <p style="font-size: 20px; color: white">Uploading...</p>
+ <p style="font-size: 20px; color: white">Processing...</p>
 </ngx-spinner>
 
 <form>
@@ -14,8 +14,10 @@
         </label>
         <br/>
         <button type="button" class="btn btn-success" [disabled]="!selectedFiles" (click)="upload($event)">
-            Upload & Execute
-            
+            Upload
+        </button>
+        <button type="button" class="btn btn-success" [disabled]="!uploaded" (click)="execute($event)">
+            Execute    
         </button>&nbsp;
         <button type="reset" class="btn btn-success">Clear file</button>
     </div>
@@ -23,8 +25,8 @@
 </form>
 
 <div style="align-content: center">
-    <circle-progress>
-        [hidden]="(!uploaded)"
+    <circle-progress
+        [hidden]=true
         [percent]="executePercentage"
         [maxPercent]="100"
         [radius]="100"

@@ -12,6 +12,11 @@
       <mat-header-cell mat-sort-header *matHeaderCellDef> Line Number </mat-header-cell>
       <mat-cell *matCellDef="let row"> {{row.lineNo}} </mat-cell>
     </ng-container>
+
+    <ng-container matColumnDef="methodName">
+      <mat-header-cell mat-sort-header *matHeaderCellDef> Method Name </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.methodName}} </mat-cell>
+    </ng-container>
   
     
     <ng-container matColumnDef="startTime">

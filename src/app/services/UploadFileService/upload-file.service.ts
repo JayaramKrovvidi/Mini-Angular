@@ -33,4 +33,14 @@ export class UploadFileService {
     window.alert(errorMessage);
     return throwError(errorMessage);
   }
+
+  executeFile(fileId)
+  {
+    return this.http.post("/test3/execute/"+fileId,null);
+  }
+
+  getPercentage()
+  {
+    return this.http.get("/test3/getPercentage");
+  }
 }

@@ -8,8 +8,8 @@ import { HistoryService } from 'src/app/services/HistoryService/history.service'
 export interface DataTableItem {
   fileId:number,
   fileName: string;
-  startTime: string;
-  stopTime: string;
+  startTime: Date;
+  stopTime: Date;
   executionTime: number;
   recordsCount: number;
   recordsPassed: number;

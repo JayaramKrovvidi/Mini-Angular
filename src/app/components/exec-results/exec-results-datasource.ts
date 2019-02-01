@@ -8,7 +8,8 @@ import { ExecutionResultsService } from 'src/app/services/ExecutionResultsServic
 // TODO: Replace this with your own data model type
 export interface ExecResultsItem {
     fileId :number ,  
-    lineNo :number,  
+    lineNo :number,
+    methodName : string,
     startTime :Date,
     endTime:Date,
     expectedResponseCode:number,
@@ -100,6 +101,7 @@ export class ExecResultsDataSource extends DataSource<ExecResultsItem> {
       switch (this.sort.active) {
         case 'fileId': return compare(a.fileId, b.fileId, isAsc);
         case 'lineNo': return compare(+a.lineNo, +b.lineNo, isAsc);
+        case 'methodName': return compare(+a.methodName, +b.methodName, isAsc);
         case 'startTime': return compare(+a.startTime, +b.startTime, isAsc);
         case 'endTime': return compare(+a.endTime, +b.endTime, isAsc);
         case 'expectedResponseCode': return compare(+a.expectedResponseCode, +b.expectedResponseCode, isAsc);

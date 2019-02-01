@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UploadFileService } from 'src/app/services/UploadFileService/upload-file.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import {Router} from "@angular/router"
+import {Router} from "@angular/router";
+import { Subscription, timer, pipe, interval } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import * as XLSX from 'ts-xlsx';
 
  
@@ -16,14 +18,15 @@ export class UploadComponent implements OnInit {
   arrayBuffer:any;
   selectedFiles : FileList;
   currentUpload : File;
+  currentFileId : number;
   executePercentage: any = 0;
-  uploaded: boolean;
+  uploaded: boolean = false;
   isFileValid: boolean;
+  executeSubscription : Subscription;
 
   constructor(private uploadService : UploadFileService, public spinner: NgxSpinnerService, private router: Router){}
 
   ngOnInit() {
-    this.uploaded = false;
     this.isFileValid = false;
   }
 
@@ -63,11 +66,9 @@ export class UploadComponent implements OnInit {
       this.currentUpload = this.selectedFiles.item(0);
       this.uploadService.pushFileToWebsite(this.currentUpload).subscribe(
         response =>{
-            console.log(response.fileId);
+            this.currentFileId = response.fileId;
             this.spinner.hide();
-            this.executePercentage = 100;
-            if(this.executePercentage===100)
-              this.router.navigate(['/results',response.fileId]);
+            this.uploaded=true;
           },
           error => {
             console.log(error);
@@ -80,5 +81,20 @@ export class UploadComponent implements OnInit {
       this.spinner.hide();
       alert("XLSX file headers are incorrect");
     }
+  }
+  execute(event)
+  {
+    this.spinner.show();
+    //this.uploaded = false;
+    this.uploadService.executeFile(this.currentFileId).subscribe(
+      response =>{
+        this.router.navigate(['/results',this.currentFileId]);
+        this.spinner.hide();
+      },
+      error =>{
+        this.spinner.hide();
+      }
+      );
+      
   }
 }

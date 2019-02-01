@@ -23,7 +23,7 @@ export class ExecResultsComponent implements OnInit {
   });
   }
 
-  displayedColumns = ['fileId', 'lineNo', 'startTime','endTime','expectedResponseCode','obtainedResponseCode','expectedResponseType','obtainedResponseType','result'];
+  displayedColumns = ['fileId', 'lineNo', 'methodName', 'startTime','endTime','expectedResponseCode','obtainedResponseCode','expectedResponseType','obtainedResponseType','result'];
 
   ngOnInit() {
    
